@@ -5,7 +5,10 @@ require('dotenv').config();   //  Чтобы получить данные из 
 //console.log(process.env);
 
 const app = express();
-app.listen(3000, () => console.log('Listening at 3000...'));
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Starting server at ${port} ...`);
+});
 app.use(express.static('public'));
 app.use(express.json({ limit: '1mb'}));
 
@@ -15,8 +18,8 @@ app.use(express.json({ limit: '1mb'}));
 // "expires_in": 0  (бесконечное время жизни токена)
 const access_token = process.env.ACCESS_TOKEN;    // Получает токен из файла .env
 
-//const tovar_id = "-93793008_964938"; // яблоки
-const tovar_id = "-93793008_79152";  // посуда из глины
+const tovar_id = "-93793008_964938"; // яблоки
+//const tovar_id = "-93793008_79152";  // посуда из глины
 const api_version = "5.126";
 const tovar_url = "https://api.vk.com/method/market.getById?item_ids=" + tovar_id +
         "&access_token=" + access_token + "&v=" + api_version;
@@ -24,10 +27,10 @@ const tovar_url = "https://api.vk.com/method/market.getById?item_ids=" + tovar_i
 app.get('/tovar', async (request, response) => {
     const fetch_response = await fetch(tovar_url);
     const json = await fetch_response.json();
-    console.log(json);
-    console.log("Count: " + json.response.count);
-    console.log("Title: " + json.response.items[0].title);
-    console.log("Description: " + json.response.items[0].description);
+    //console.log(json);
+    //console.log("Count: " + json.response.count);
+    //console.log("Title: " + json.response.items[0].title);
+    //console.log("Description: " + json.response.items[0].description);
     response.json(json);
 });
 
