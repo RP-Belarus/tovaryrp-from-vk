@@ -2,7 +2,7 @@ const express = require('express');
 const fetch = require('node-fetch');
 require('dotenv').config();
 
-console.log(process.env);
+//console.log(process.env);
 
 const app = express();
 app.listen(3000, () => console.log('Listening at 3000...'));
