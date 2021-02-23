@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const fetch = require('node-fetch');
 require('dotenv').config();   //  Чтобы получить данные из файла .env
 
@@ -6,11 +7,27 @@ require('dotenv').config();   //  Чтобы получить данные из 
 
 const app = express();
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`Starting server at ${port} ...`);
-});
-app.use(express.static('public'));
-app.use(express.json({ limit: '1mb'}));
+
+async function start() {
+    try {
+        // Подключаемся к mongoose
+        // await mongoose.connect('', {
+        //     useNewUrlParser: true,
+        //     useFindAndModify: false
+        // });
+
+        // Запускаем express
+        app.listen(port, () => {
+            console.log(`Starting server at ${port} ...`);
+        });
+        app.use(express.static('public'));
+        app.use(express.json({ limit: '1mb'}));
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+start(); // Запускаем
 
 // См. как получить токен:   https://vk.com/dev/authcode_flow_user
 // А также видео: https://www.youtube.com/watch?v=2eiPf-DfZBE
