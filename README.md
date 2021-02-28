@@ -1,5 +1,5 @@
 ## Запуск:
 
-### `node index.js`
+### npm start  ( = `node index.js`)
 Или 
-### `nodemon index.js`
+### npm run dev ( = `nodemon index.js`)
