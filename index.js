@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 
 const mongo_user = process.env.MONGO_USER;
 const mongo_pass = process.env.MONGO_PASS;
-const mongo_url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.tefog.mongodb.net/myFirstDatabase`;
+const mongo_url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.tefog.mongodb.net/tovaryFromVk`;
 const mongoClient = new MongoClient(mongo_url, { useNewUrlParser: true , useUnifiedTopology: true});
 
 async function start() {
