@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
 const fetch = require('node-fetch');
 require('dotenv').config();   //  Чтобы получить данные из файла .env
-
 //console.log(process.env);
+
+const sellerRoutes = require('./api/routes/sellers');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -39,6 +40,8 @@ async function start() {
         });
         app.use(express.static('public'));
         app.use(express.json({ limit: '1mb'}));
+
+        app.use('/sellers', sellerRoutes);
     } catch (e) {
         console.log(e);
     }
