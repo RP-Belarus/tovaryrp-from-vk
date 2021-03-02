@@ -2,14 +2,12 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 
-const vk = require('../vkApi');
+const vk = require('../vk-api');
 
 const Seller = require('../models/seller');
 
 router.get('/', (req, res, next) => {
-    const seller = vk.getTovaryByOwnerId(345);
     console.log('Успешно отработали GET');
-    //console.log('А теперь из ВК : ' + seller);
     res.status(200).json({
         message: 'Отработали GET'
     });
@@ -24,12 +22,23 @@ router.post('/', (req, res, next) => {
 
 router.get('/:sellerId', (req, res, next) => {
     const id = req.params.sellerId;
-    const tovar = vk.getTovarById(id);
-    console.log('Получили продавца с ID = ' + req.params.sellerId);
-    console.log('А теперь из ВК : ' + tovar);
-    res.status(200).json({
-        message: 'Продавец с ID = ' + id
-    });
+    // vk.getTovarById(id).then(tovar => {
+    //     console.log('А теперь из ВК : ' + tovar);
+    //     res.status(200).json({
+    //         message: 'Продавец с ID = ' + id,
+    //         tovar: tovar
+    //     });
+    // });
+    vk.getTovaryByOwnerId(id)
+        .then(tovary => {
+            res.status(200).json({
+                message: 'Получаем товары от продавца с ID = ' + id,
+                tovary: tovary
+            })
+        })
+        .catch(err => {
+            console.log(err);
+        });
 });
 
 router.patch('/:sellerId', (req, res, next) => {
