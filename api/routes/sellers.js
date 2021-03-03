@@ -7,17 +7,38 @@ const vk = require('../vk-api');
 const Seller = require('../models/seller');
 
 router.get('/', (req, res, next) => {
-    console.log('Успешно отработали GET');
-    res.status(200).json({
-        message: 'Отработали GET'
-    });
+    // Загружаем из базы
+    Seller.find()
+        .exec()
+        .then(docs => {
+            res.status(200).json(docs)
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        });
 });
 
 router.post('/', (req, res, next) => {
-    console.log('Успешно отработали POST');
-    res.status(201).json({
-        message: 'Отработали POST'
+    const seller = new Seller({
+        name: req.body.name,
+        vk_url: req.body.vk_url,
+        lat: req.body.lat,
+        lon: req.body.lon
     });
+    // Сохраняем в базу
+    seller.save()
+        .then(result => {
+            console.log(result);
+            res.status(201).json(result);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            })
+        });
 });
 
 router.get('/:sellerId', (req, res, next) => {
