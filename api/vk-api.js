@@ -17,11 +17,17 @@ module.exports = {
     // tovarId = "-93793008_964938"; // яблоки
     // tovarId = "-93793008_79152";  // посуда из глины
     getTovarById: async (tovarId) => {
-        const url = "https://api.vk.com/method/market.getById?item_ids=" + tovarId +
-                    "&access_token=" + access_token + "&v=" + api_version;
-        const fetch_response = await fetch(url);
-        const tovar = await fetch_response.json();
-        return tovar;
+        try {
+            const url = "https://api.vk.com/method/market.getById?item_ids=" + tovarId +
+                "&access_token=" + access_token + "&v=" + api_version;
+            const fetch_response = await fetch(url);
+            const tovar = await fetch_response.json();
+            return tovar;
+        } catch (err) {
+            return {
+                error: 'Не удалось получить товар из API Вконтакте'
+            }
+        }
     },
 
     // Получаем товары из ВК по ID сообщества. См. https://vk.com/dev/market.get
@@ -31,11 +37,17 @@ module.exports = {
     // -81509275   Мастерская деревянной живописи "ПинескЪ"
     // -13916738   Мастерская по дереву "Добрый лес"
     getTovaryByOwnerId: async (ownerId) => {
-        const url = "https://api.vk.com/method/market.get?owner_id=" + ownerId +
-                    "&access_token=" + access_token + "&v=" + api_version;
-        const fetch_response = await fetch(url);
-        const tovary = await fetch_response.json();
-        return tovary;
+        try {
+            const url = "https://api.vk.com/method/market.get?owner_id=" + ownerId +
+                "&access_token=" + access_token + "&v=" + api_version;
+            const fetch_response = await fetch(url);
+            const tovary = await fetch_response.json();
+            return tovary;
+        } catch (err) {
+            return {
+                error: 'Не удалось получить данные из API Вконтакте'
+            }
+        }
     }
 
 };

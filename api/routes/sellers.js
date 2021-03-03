@@ -22,13 +22,14 @@ router.post('/', (req, res, next) => {
 
 router.get('/:sellerId', (req, res, next) => {
     const id = req.params.sellerId;
-    // vk.getTovarById(id).then(tovar => {
-    //     console.log('А теперь из ВК : ' + tovar);
-    //     res.status(200).json({
-    //         message: 'Продавец с ID = ' + id,
-    //         tovar: tovar
+    // vk.getTovarById(id)
+    //     .then(tovar => {
+    //         console.log('А теперь из ВК : ' + tovar);
+    //         res.status(200).json({
+    //             message: 'Продавец с ID = ' + id,
+    //             tovar: tovar
+    //         });
     //     });
-    // });
     vk.getTovaryByOwnerId(id)
         .then(tovary => {
             res.status(200).json({
