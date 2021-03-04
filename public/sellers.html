@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#">
+    <title>Список продавцов</title>
+</head>
+<body>
+<h1>Список продавцов</h1>
+
+<script>
+    getData();
+    async function getData() {
+        const response = await fetch('/sellers');
+        const data = await response.json();
+
+        for (item of data) {
+            const root = document.createElement('p');
+            const name = document.createElement('div');
+            const coords = document.createElement('div');
+            const vk_public = document.createElement('div');
+
+            name.innerHTML = `Название: <strong>${item.name}</strong>`;
+
+            //coords.textContent = `Координаты: ${item.lat}°, ${item.lon}°`;
+            const map_url = `https://www.openstreetmap.org/?mlat=${item.lat}&mlon=${item.lon}#map=12/${item.lat}/${item.lon}`;
+            coords.innerHTML = `Координаты: <a href="${map_url}" target="_blank">${item.lat}°, ${item.lon}°</a>`;
+
+            const vk_url = `https://vk.com/market${item.vk_url}`;
+            vk_public.innerHTML = `Группа Вконтакте: <a href="${vk_url}" target="_blank">${vk_url}</a>`;
+            //vk_url.setAttribute('href', `https://vk.com/market${item.vk_url}`);
+            //vk_url.setAttribute('target', '_blank');
+
+            root.append(name, coords, vk_public);
+            document.body.append(root);
+        }
+
+        console.log(data);
+    }
+</script>
+
+</body>
+</html>
