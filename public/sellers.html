@@ -19,19 +19,20 @@
             const name = document.createElement('div');
             const coords = document.createElement('div');
             const vk_public = document.createElement('div');
+            const vk_tovary = document.createElement('div');
 
             name.innerHTML = `Название: <strong>${item.name}</strong>`;
 
-            //coords.textContent = `Координаты: ${item.lat}°, ${item.lon}°`;
             const map_url = `https://www.openstreetmap.org/?mlat=${item.lat}&mlon=${item.lon}#map=12/${item.lat}/${item.lon}`;
             coords.innerHTML = `Координаты: <a href="${map_url}" target="_blank">${item.lat}°, ${item.lon}°</a>`;
 
-            const vk_url = `https://vk.com/market${item.vk_url}`;
+            const vk_url = `https://vk.com/market${item.vk_owner_id}`;
             vk_public.innerHTML = `Группа Вконтакте: <a href="${vk_url}" target="_blank">${vk_url}</a>`;
-            //vk_url.setAttribute('href', `https://vk.com/market${item.vk_url}`);
-            //vk_url.setAttribute('target', '_blank');
 
-            root.append(name, coords, vk_public);
+            const tovary_api_url = `/sellers/${item.vk_owner_id}`;
+            vk_tovary.innerHTML = `Товары: <a href="${tovary_api_url}" target="_blank">получить JSON</a>`;
+
+            root.append(name, coords, vk_public, vk_tovary);
             document.body.append(root);
         }
 

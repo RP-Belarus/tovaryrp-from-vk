@@ -23,7 +23,7 @@ router.get('/', (req, res, next) => {
 router.post('/', (req, res, next) => {
     const seller = new Seller({
         name: req.body.name,
-        vk_url: req.body.vk_url,
+        vk_owner_id: req.body.vk_owner_id,
         lat: req.body.lat,
         lon: req.body.lon
     });
@@ -41,25 +41,32 @@ router.post('/', (req, res, next) => {
         });
 });
 
-router.get('/:sellerId', (req, res, next) => {
-    const id = req.params.sellerId;
-    // vk.getTovarById(id)
-    //     .then(tovar => {
-    //         console.log('А теперь из ВК : ' + tovar);
-    //         res.status(200).json({
-    //             message: 'Продавец с ID = ' + id,
-    //             tovar: tovar
-    //         });
-    //     });
-    vk.getTovaryByOwnerId(id)
-        .then(tovary => {
-            res.status(200).json({
-                message: 'Получаем товары от продавца с ID = ' + id,
-                tovary: tovary
-            })
+router.get('/:vkUrl', (req, res, next) => {
+    const vkOwnerId = req.params.vkUrl;
+    // Ищем продавца в базе по vk_owner_id
+    Seller.findOne({ vk_owner_id: vkOwnerId })
+        .exec()
+        .then(seller => {
+            if (seller) {
+                // Получаем товары продавца из API Вконтакте
+                vk.getTovaryByOwnerId(vkOwnerId)
+                    .then(tovary => {
+                        res.status(200).json({
+                            seller: seller,
+                            tovary: tovary
+                        });
+                    })
+                    .catch(err => {
+                        res.status(500).json({ error: err });
+                    });
+            } else {
+                res.status(404).json({
+                    message: `Продавец с owner_id = ${vkOwnerId} не найден в базе`
+                });
+            }
         })
         .catch(err => {
-            console.log(err);
+            res.status(500).json({ error: err });
         });
 });
 
