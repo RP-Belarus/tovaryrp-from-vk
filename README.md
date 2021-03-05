@@ -1,10 +1,11 @@
 ## Запуск:
 
-### npm start  ( = `node index.js`)
+    npm start  ( = `node index.js`)
 Или 
-### npm run dev ( = `nodemon index.js`)
+    
+    npm run dev ( = `nodemon index.js`)
 
-##Heroku
+## Heroku
 Деплой на Heroku:
 
     heroku login
