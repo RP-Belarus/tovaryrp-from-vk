@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#">
+    <title>Добавить продавца</title>
+</head>
+<body>
+<h1>Добавить продавца</h1>
+<form>
+    <p>
+        <label for="name">Имя/название:</label>
+        <input id="name" type="text" required value="Qwert">
+    </p>
+    <p>
+        <label for="owner_id">ВК owner_id:</label>
+        <input id="owner_id" type="text" required value="-123456">
+    </p>
+    <p>
+        <label for="lat">Широта (lat):</label>
+        <input id="lat" type="text" required value="55.5">
+    </p>
+    <p>
+        <label for="lon">Долгота (lon):</label>
+        <input id="lon" type="text" required value="22.2">
+    </p>
+    <button id="submit">Добавить</button>
+</form>
+
+<script>
+    const button = document.getElementById('submit');
+    button.addEventListener('click', async event => {
+        event.preventDefault();  // Чтобы не выскакивала ошибка "NetworkError when attempting to fetch resource"
+        const name = document.getElementById('name').value;
+        const vk_owner_id = document.getElementById('owner_id').value;
+        const lat = document.getElementById('lat').value;
+        const lon = document.getElementById('lon').value;
+
+        const data = { name, vk_owner_id, lat, lon};
+        //alert("Имя: " + name + ", owner_id: " + vk_owner_id + ", lat: " + lat + ", lon: " + lon);
+        if (name && vk_owner_id && lat && lon) {
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            };
+            const response = await fetch('/sellers', options);
+            const json = await response.json();
+            console.log('JSON отправлен в базу', json);
+        } else {
+            await console.log("Введены не все поля");
+        }
+    });
+</script>
+
+</body>
+</html>
