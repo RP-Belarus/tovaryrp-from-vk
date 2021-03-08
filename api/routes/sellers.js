@@ -41,8 +41,8 @@ router.post('/', (req, res, next) => {
         });
 });
 
-router.get('/:vkUrl', (req, res, next) => {
-    const vkOwnerId = req.params.vkUrl;
+router.get('/:vkOwnerId', (req, res, next) => {
+    const vkOwnerId = req.params.vkOwnerId;
     // Ищем продавца в базе по vk_owner_id
     Seller.findOne({ vk_owner_id: vkOwnerId })
         .exec()
@@ -70,20 +70,60 @@ router.get('/:vkUrl', (req, res, next) => {
         });
 });
 
-router.patch('/:sellerId', (req, res, next) => {
+router.get('/id/:sellerId', (req, res, next) => {
     const id = req.params.sellerId;
-    console.log('Обновили продавца с ID = ' + req.params.sellerId);
-    res.status(200).json({
-        message: 'Обновили продавца с ID = ' + id
-    });
+    Seller.findById(id)
+        .exec()
+        .then(seller => {
+            if (seller) {
+                res.status(200).json(seller);
+            } else {
+                res.status(404).json({
+                    message: `Продавец с id = ${id} не найден`
+                })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ error: err });
+        });
 });
 
-router.delete('/:sellerId', (req, res, next) => {
+router.patch('/id/:sellerId', (req, res, next) => {
     const id = req.params.sellerId;
-    console.log('Продавец с ID = ' + req.params.sellerId + ' успешно удалён');
-    res.status(200).json({
-        message: 'Продавец с ID = ' + id + ' удалён'
-    });
+    //console.log('Обновили продавца с ID = ' + req.params.sellerId);
+    Seller.updateOne({ _id: id }, { $set: {
+        name: req.body.newName,
+        vk_owner_id: req.body.newVkOwnerId,
+        lat: req.body.newLat,
+        lon: req.body.newLon
+    } })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                message: `Продавец с id = ${id} успешно изменён`
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        });
+});
+
+router.delete('/id/:sellerId', (req, res, next) => {
+    const id = req.params.sellerId;
+    Seller.deleteOne({ _id: id })
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                message: `Продавец с id = ${id} удалён`
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error: err
+            })
+        });
 });
 
 module.exports = router;
