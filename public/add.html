@@ -37,7 +37,7 @@
         const lon = document.getElementById('lon').value;
 
         const data = { name, vk_owner_id, lat, lon};
-        //alert("Имя: " + name + ", owner_id: " + vk_owner_id + ", lat: " + lat + ", lon: " + lon);
+
         if (name && vk_owner_id && lat && lon) {
             const options = {
                 method: 'POST',
@@ -49,6 +49,8 @@
             const response = await fetch('/sellers', options);
             const json = await response.json();
             console.log('JSON отправлен в базу', json);
+            alert('Продавец успешно добавлен, name = ' + json.name);
+            window.location.href = 'sellers.html';          // Перейти к списку продавцов
         } else {
             await console.log("Введены не все поля");
         }

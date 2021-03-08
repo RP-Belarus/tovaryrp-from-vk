@@ -20,6 +20,7 @@
             const coords = document.createElement('div');
             const vk_public = document.createElement('div');
             const vk_tovary = document.createElement('div');
+            const edit_delete = document.createElement('div');
 
             name.innerHTML = `Название: <strong>${item.name}</strong>`;
 
@@ -32,7 +33,10 @@
             const tovary_api_url = `/sellers/${item.vk_owner_id}`;
             vk_tovary.innerHTML = `Товары: <a href="${tovary_api_url}" target="_blank">получить JSON</a>`;
 
-            root.append(name, coords, vk_public, vk_tovary);
+            const edit_url = `/edit.html?id=${item._id}`;
+            edit_delete.innerHTML = `id = ${item._id} ( <a href="${edit_url}">редактировать</a> | удалить)`;
+
+            root.append(name, coords, vk_public, vk_tovary, edit_delete);
             document.body.append(root);
         }
 
