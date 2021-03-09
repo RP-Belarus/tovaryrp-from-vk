@@ -27,12 +27,48 @@
         <label for="lon">Долгота (lon):</label>
         <input id="lon" type="text" required>
     </p>
-    <button id="submit">Редактировать</button>
+    <button id="submit">Сохранить</button>
 </form>
 
 <script>
     const id = (new URL(document.location)).searchParams.get('id');  // Получаем id из параметров строки ?id=.....
     document.getElementById('id').innerHTML= `id = ${id}`;
+    getSeller();
+
+    async function getSeller() {
+        const response = await fetch(`/sellers/id/${id}`);
+        const seller = await response.json();
+        document.getElementById('name').value = seller.name;
+        document.getElementById('owner_id').value = seller.vk_owner_id;
+        document.getElementById('lat').value = seller.lat;
+        document.getElementById('lon').value = seller.lon;
+    }
+
+    const button = document.getElementById('submit');
+    button.addEventListener('click', async event => {
+        event.preventDefault();  // Чтобы не выскакивала ошибка "NetworkError when attempting to fetch resource"
+        const newName = document.getElementById('name').value;
+        const newVkOwnerId = document.getElementById('owner_id').value;
+        const newLat = document.getElementById('lat').value;
+        const newLon = document.getElementById('lon').value;
+        const data = { newName, newVkOwnerId, newLat, newLon};
+        if (newName && newVkOwnerId && newLat && newLon) {
+            const options = {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            };
+            const response = await fetch(`/sellers/id/${id}`, options);
+            const json = await response.json();
+            //console.log('Изменения внесены в базу', json);
+            alert(json.message);
+            window.location.href = 'sellers.html';          // Перейти к списку продавцов
+        } else {
+            alert('Введены не все поля');
+        }
+    });
 </script>
 
 </body>
