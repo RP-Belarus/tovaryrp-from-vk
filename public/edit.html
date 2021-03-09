@@ -28,6 +28,7 @@
         <input id="lon" type="text" required>
     </p>
     <button id="submit">Сохранить</button>
+    <button id="cancel">Отмена</button>
 </form>
 
 <script>
@@ -68,6 +69,12 @@
         } else {
             alert('Введены не все поля');
         }
+    });
+
+    const button_cancel = document.getElementById('cancel');
+    button_cancel.addEventListener('click', event => {
+        event.preventDefault();
+        window.location.href = 'sellers.html';          // Перейти к списку продавцов
     });
 </script>
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#">
+    <title>Удалить продавца</title>
+</head>
+<body>
+<h1>Удалить продавца?</h1>
+<p>
+    <div id="id">id = ...</div>
+    <div id="name">Имя/название = ...</div>
+    <div id="owner_id">ВК owner_id = ...</div>
+    <div id="coords">Координаты = ...°, ...°</div>
+</p>
+<button id="submit">Удалить</button>
+<button id="cancel">Отмена</button>
+
+<script>
+    const id = (new URL(document.location)).searchParams.get('id');  // Получаем id из параметров строки ?id=.....
+    document.getElementById('id').innerHTML = `id = ${id}`;
+    getSeller();
+
+    async function getSeller() {
+        const response = await fetch(`/sellers/id/${id}`);
+        const seller = await response.json();
+        document.getElementById('name').innerHTML = `Имя/название = ${seller.name}`;
+        document.getElementById('owner_id').innerHTML = `ВК owner_id = ${seller.vk_owner_id}`;
+        document.getElementById('coords').innerHTML = `Координаты = ${seller.lat}°, ${seller.lon}°`;
+    }
+
+    const button = document.getElementById('submit');
+    button.addEventListener('click', async event => {
+        event.preventDefault();  // Чтобы не выскакивала ошибка "NetworkError when attempting to fetch resource"
+        const del = confirm('Удалить? Вы уверены?');
+        if (del) {
+            const options = {
+                method: 'DELETE'
+            };
+            const response = await fetch(`/sellers/id/${id}`, options);
+            const json = await response.json();
+            console.log('Продавец удалён', json);
+            alert(json.message);
+            window.location.href = 'sellers.html';          // Перейти к списку продавцов
+        }
+    });
+
+    const button_cancel = document.getElementById('cancel');
+    button_cancel.addEventListener('click', event => {
+        event.preventDefault();
+        window.location.href = 'sellers.html';          // Перейти к списку продавцов
+    });
+
+</script>
+
+</body>
+</html>

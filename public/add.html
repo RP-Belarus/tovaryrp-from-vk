@@ -25,6 +25,7 @@
         <input id="lon" type="text" required value="22.2">
     </p>
     <button id="submit">Добавить</button>
+    <button id="cancel">Отмена</button>
 </form>
 
 <script>
@@ -55,6 +56,12 @@
             //await console.log("Введены не все поля");
             alert('Введены не все поля');
         }
+    });
+
+    const button_cancel = document.getElementById('cancel');
+    button_cancel.addEventListener('click', event => {
+        event.preventDefault();
+        window.location.href = 'sellers.html';          // Перейти к списку продавцов
     });
 </script>
 
