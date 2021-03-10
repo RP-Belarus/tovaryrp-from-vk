@@ -21,7 +21,7 @@ async function start() {
         });
 
         // Запускаем express
-        console.log("URL: " + mongo_url);
+        //console.log("URL: " + mongo_url);
         app.listen(port, () => {
             console.log(`Starting server at ${port} ...`);
         });
