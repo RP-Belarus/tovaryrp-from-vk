@@ -48,6 +48,25 @@ module.exports = {
                 error: 'Не удалось получить данные из API Вконтакте'
             }
         }
+    },
+
+    // Получить данные группы Вконтакте
+    // Подробнее о методе groups.getById  см.: https://vk.com/dev.php?method=groups.getById
+    // Пример строки:
+    // https://api.vk.com/method/groups.getById?group_id=93793008&access_token=....&v=5.126&fields=description,market
+    getGroupInfo: async (ownerId) => {
+        try {
+            const groupId = ownerId.slice(1);  //  Удаляем первый символ "-"
+            const url = "https://api.vk.com/method/groups.getById?group_id=" + groupId +
+                "&access_token=" + access_token + "&v=" + api_version + "&fields=description,market";
+            const fetch_response = await fetch(url);
+            const groupInfo = await fetch_response.json();
+            return groupInfo;
+        } catch (err) {
+            return {
+                error: 'Не удалось получить данные из API Вконтакте'
+            }
+        }
     }
 
 };

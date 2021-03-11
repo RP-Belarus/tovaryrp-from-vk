@@ -126,4 +126,17 @@ router.delete('/id/:sellerId', (req, res, next) => {
         });
 });
 
+//  Метод для получения информации о группе Вконтакте
+//  TODO Доработать а) путь, б) чтобы обрабатывал входящий id, в) выборочно список полей (убрать лишние)
+router.get('/group/:groupId', (req, res, next) => {
+   //vk.getGroupInfo('-93793008')
+    vk.getGroupInfo('-128194899')
+       .then(groupInfo => {
+           res.status(200).json(groupInfo)
+       })
+       .catch(err => {
+           res.status(500).json({ error: err });
+       });
+});
+
 module.exports = router;
