@@ -11,7 +11,17 @@ router.get('/', (req, res, next) => {
     Seller.find()
         .exec()
         .then(docs => {
-            res.status(200).json(docs)
+            // const result = {};
+            // for (item in docs) {
+            //     vk.getGroupInfo(docs[item].vk_owner_id.slice(1))
+            //         .then(groupInfo => {
+            //             console.log(groupInfo.name);
+            //             result[item] = { ...docs[item]._doc, qqq: 'Какая-то хрень' }
+            //             console.log(result[item].qqq)
+            //         }).catch(err => {});
+            // }
+            // res.status(200).json(result);
+            res.status(200).json(docs);
         })
         .catch(err => {
             res.status(500).json({
@@ -50,11 +60,16 @@ router.get('/:vkOwnerId', (req, res, next) => {
             if (seller) {
                 // Получаем товары продавца из API Вконтакте
                 vk.getTovaryByOwnerId(vkOwnerId)
+                    // Получаем информацию о группе Вконтакте
                     .then(tovary => {
-                        res.status(200).json({
-                            seller: seller,
-                            tovary: tovary
-                        });
+                        vk.getGroupInfo(vkOwnerId.slice(1))  // slice(1) - удаляем "-" перед owner_id
+                            .then(groupInfo => {
+                                res.status(200).json({
+                                    seller: seller,
+                                    group_info: groupInfo,
+                                    tovary: tovary
+                                })
+                            })
                     })
                     .catch(err => {
                         res.status(500).json({ error: err });
@@ -127,10 +142,11 @@ router.delete('/id/:sellerId', (req, res, next) => {
 });
 
 //  Метод для получения информации о группе Вконтакте
-//  TODO Доработать а) путь, б) чтобы обрабатывал входящий id, в) выборочно список полей (убрать лишние)
+//  (используется только в тестовых целях)
 router.get('/group/:groupId', (req, res, next) => {
-   //vk.getGroupInfo('-93793008')
-    vk.getGroupInfo('-128194899')
+   //  vk.getGroupInfo('93793008')
+   //  vk.getGroupInfo('128194899')
+    vk.getGroupInfo(req.params.groupId)
        .then(groupInfo => {
            res.status(200).json(groupInfo)
        })

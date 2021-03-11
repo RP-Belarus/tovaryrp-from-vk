@@ -54,14 +54,25 @@ module.exports = {
     // Подробнее о методе groups.getById  см.: https://vk.com/dev.php?method=groups.getById
     // Пример строки:
     // https://api.vk.com/method/groups.getById?group_id=93793008&access_token=....&v=5.126&fields=description,market
-    getGroupInfo: async (ownerId) => {
+    getGroupInfo: async (groupId) => {
         try {
-            const groupId = ownerId.slice(1);  //  Удаляем первый символ "-"
+            //const groupId = ownerId.slice(1);  //  Удаляем первый символ "-"
             const url = "https://api.vk.com/method/groups.getById?group_id=" + groupId +
                 "&access_token=" + access_token + "&v=" + api_version + "&fields=description,market";
             const fetch_response = await fetch(url);
             const groupInfo = await fetch_response.json();
-            return groupInfo;
+            //  return groupInfo;   //  если нужно вернуть все поля
+            return ({
+                name: groupInfo.response[0].name,
+                description: groupInfo.response[0].description,
+                market: {
+                    enabled: groupInfo.response[0].market.enabled,
+                    contact_id: groupInfo.response[0].market.contact_id  //  если с "-", для связи использ. сообщ. сообщества
+                },
+                photo_50: groupInfo.response[0].photo_50,
+                photo_100: groupInfo.response[0].photo_100,
+                photo_200: groupInfo.response[0].photo_200
+            });
         } catch (err) {
             return {
                 error: 'Не удалось получить данные из API Вконтакте'
