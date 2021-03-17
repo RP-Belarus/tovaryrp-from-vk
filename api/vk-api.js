@@ -78,6 +78,15 @@ module.exports = {
                 error: 'Не удалось получить данные из API Вконтакте'
             }
         }
+    },
+
+    // Получить данные о нескольких группах Вконтакте
+    // Подробнее о методе groups.getById  см.: https://vk.com/dev.php?method=groups.getById
+    // Пример строки: ...
+    getGroupsInfo: async (groupIds) => {
+        return {
+            message: 'Какие-то данные...'
+        }
     }
 
 };
