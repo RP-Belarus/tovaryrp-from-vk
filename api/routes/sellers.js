@@ -21,7 +21,36 @@ router.get('/', (req, res, next) => {
             //         }).catch(err => {});
             // }
             // res.status(200).json(result);
-            res.status(200).json(docs);
+
+            // Получаем все group_id из docs и помещаем их в массив groupIds
+            const groupIds = docs.reduce((ids, vkGroup) => [ ...ids, vkGroup.vk_owner_id.slice(1)], [])
+            console.log(groupIds)
+
+            // Получаем информацию о группах Вконтакте по их groupIds
+            vk.getGroupsInfo(groupIds)
+                .then(groupsInfo => {
+                    for (let groupInfo of groupsInfo.response) {
+                        console.log(groupInfo.name)
+                    }
+                })
+                .catch(err => {
+                    console.log('Что-то пошло не так... ', err)
+                })
+
+            const result = {};
+            for (item in docs) {
+                // vk.getGroupInfo(docs[item].vk_owner_id.slice(1))
+                //     .then(groupInfo => {
+                //         console.log(groupInfo.name);
+                //         result[item] = { ...docs[item]._doc, qqq: 'Какая-то хрень' }
+                //         console.log(result[item].qqq)
+                //     }).catch(err => {});
+                result[item] = { ...docs[item]._doc, qqq: { text: 'Какой-то текст', number: 5 } }
+                //console.log('Result[item]: ', result[item])
+            }
+            res.status(200).json(result);
+
+            //res.status(200).json(docs);
         })
         .catch(err => {
             res.status(500).json({
@@ -154,5 +183,24 @@ router.get('/group/:groupId', (req, res, next) => {
            res.status(500).json({ error: err });
        });
 });
+
+//  Метод для получения информации о нескольких группах Вконтакте
+//  (используется только в тестовых целях)
+//  93793008,128194899,81509275,13916738
+router.get('/groups/:groupIds', (req, res, next) => {
+
+    const ids = req.params.groupIds.split(',')
+    console.log('Length: ', ids.length)
+
+    // const groupIds = [93793008, 128194899, 81509275]
+    // vk.getGroupsInfo(groupIds)
+    vk.getGroupsInfo(req.params.groupIds)
+        .then(groupsInfo => {
+            res.status(200).json(groupsInfo)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err })
+        })
+})
 
 module.exports = router;

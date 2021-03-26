@@ -78,6 +78,26 @@ module.exports = {
                 error: 'Не удалось получить данные из API Вконтакте'
             }
         }
+    },
+
+    // Получить данные о нескольких группах Вконтакте (не более 50! - ограничение API Вконтакте)
+    // Подробнее о методе groups.getById  см.: https://vk.com/dev.php?method=groups.getById
+    // примеры group_ids:  93793008,128194899,81509275,13916738
+    // Пример строки:
+    // ...
+    getGroupsInfo: async (groupIds) => {
+        try {
+            const url = "https://api.vk.com/method/groups.getById?group_ids=" + groupIds +
+                "&access_token=" + access_token + "&v=" + api_version + "&fields=description,market";
+            const fetch_response = await fetch(url);
+            const groupsInfo = await fetch_response.json();
+            //return groupIds
+            return groupsInfo
+        } catch (err) {
+            return {
+                error: 'Не удалось получить данные из API Вконтакте'
+            }
+        }
     }
 
 };
