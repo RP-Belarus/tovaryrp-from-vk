@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#">
+    <title>Фронтенд</title>
+</head>
+<body>
+<h1>Фронтенд</h1>
+<p>Выборка из API</p>
+
+<script>
+    getData();
+    async function getData() {
+        const response = await fetch('https://tovaryrp-from-vk.herokuapp.com/sellers');
+        const data = await response.json();
+        console.log(data);
+        for (item of data) {
+            console.log(item.name);
+        }
+    }
+</script>
+
+</body>
+</html>
