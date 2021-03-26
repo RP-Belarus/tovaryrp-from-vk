@@ -45,7 +45,7 @@ router.get('/', (req, res, next) => {
                 //         result[item] = { ...docs[item]._doc, qqq: 'Какая-то хрень' }
                 //         console.log(result[item].qqq)
                 //     }).catch(err => {});
-                result[item] = { ...docs[item]._doc, qqq: { text: 'Какой-то текст', number: 5 } }
+                result[item] = { ...docs[item]._doc, qqq: 'Какой-то текст' }
                 //console.log('Result[item]: ', result[item])
             }
             res.status(200).json(result);
