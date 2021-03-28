@@ -14,14 +14,16 @@
         const response = await fetch('/sellers');
         const data = await response.json();
 
-        //for (item of data) {
-        for (let [key, item] of Object.entries(data)) {
+        for (item of data) {
             const root = document.createElement('p');
+            const image = document.createElement('img');
             const name = document.createElement('div');
             const coords = document.createElement('div');
             const vk_public = document.createElement('div');
             const vk_tovary = document.createElement('div');
 
+            // Картинка
+            image.setAttribute('src', item.vk_group_info.photo_50)
             // Название (name)
             name.innerHTML = `Название: <strong>${item.name}</strong>`;
             // Координаты (lat, lon)
@@ -34,7 +36,7 @@
             const tovary_api_url = `/sellers/${item.vk_owner_id}`;
             vk_tovary.innerHTML = `Товары: <a href="${tovary_api_url}" target="_blank">получить JSON</a>`;
 
-            root.append(name, coords, vk_public, vk_tovary);
+            root.append(image, name, coords, vk_public, vk_tovary);
             document.body.append(root);
         }
     }

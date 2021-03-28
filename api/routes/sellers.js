@@ -10,46 +10,30 @@ router.get('/', (req, res, next) => {
     // Загружаем из базы
     Seller.find()
         .exec()
-        .then(docs => {
-            // const result = {};
-            // for (item in docs) {
-            //     vk.getGroupInfo(docs[item].vk_owner_id.slice(1))
-            //         .then(groupInfo => {
-            //             console.log(groupInfo.name);
-            //             result[item] = { ...docs[item]._doc, qqq: 'Какая-то хрень' }
-            //             console.log(result[item].qqq)
-            //         }).catch(err => {});
-            // }
-            // res.status(200).json(result);
-
+        .then(async docs => {
             // Получаем все group_id из docs и помещаем их в массив groupIds
             const groupIds = docs.reduce((ids, vkGroup) => [ ...ids, vkGroup.vk_owner_id.slice(1)], [])
-            console.log(groupIds)
 
-            // Получаем информацию о группах Вконтакте по их groupIds
-            vk.getGroupsInfo(groupIds)
-                .then(groupsInfo => {
-                    for (let groupInfo of groupsInfo.response) {
-                        console.log(groupInfo.name)
-                    }
-                })
-                .catch(err => {
-                    console.log('Что-то пошло не так... ', err)
-                })
+            // Получаем информацию о группах Вконтакте по их groupIds и помещаем в vkGroupsInfo
+            const vkResponse = await vk.getGroupsInfo(groupIds)
+            const vkGroupsInfo = vkResponse.response
 
-            const result = {};
+            // Помещаем информацию о группах Вконтакте из vkGroupsInfo в объекты, полученные из Mongo
+            const result = [];
             for (item in docs) {
-                // vk.getGroupInfo(docs[item].vk_owner_id.slice(1))
-                //     .then(groupInfo => {
-                //         console.log(groupInfo.name);
-                //         result[item] = { ...docs[item]._doc, qqq: 'Какая-то хрень' }
-                //         console.log(result[item].qqq)
-                //     }).catch(err => {});
-                result[item] = { ...docs[item]._doc, qqq: 'Какой-то текст' }
-                //console.log('Result[item]: ', result[item])
+                result[item] = {
+                    ...docs[item]._doc,
+                    vk_group_info: {
+                        vk_name: vkGroupsInfo[item].name,
+                        vk_market_enabled: vkGroupsInfo[item].market.enabled,
+                        photo_50: vkGroupsInfo[item].photo_50,
+                        photo_100: vkGroupsInfo[item].photo_100,
+                        photo_200: vkGroupsInfo[item].photo_200,
+                        description: vkGroupsInfo[item].description
+                    }
+                }
             }
             res.status(200).json(result);
-
             //res.status(200).json(docs);
         })
         .catch(err => {
