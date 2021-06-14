@@ -8,7 +8,7 @@ require('dotenv').config();   //  Чтобы получить данные из 
 // Токен получен для localhost:3000
 // "expires_in": 0  (бесконечное время жизни токена)
 const access_token = process.env.ACCESS_TOKEN;    // Получает токен из файла .env
-const api_version = "5.126";
+const api_version = "5.131";  // было 5.126
 
 module.exports = {
 
