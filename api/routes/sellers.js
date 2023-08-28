@@ -1,3 +1,5 @@
+// --- Этот модуль расчитан на работу с Mongodb, который сейчас не работает из-за санкций
+// вместо него - см. модуль sellers-hardrode.js , где данные зашиты хардконо
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');

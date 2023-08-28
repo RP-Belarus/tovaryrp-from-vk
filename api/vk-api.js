@@ -38,7 +38,7 @@ module.exports = {
     // -13916738   Мастерская по дереву "Добрый лес"
     getTovaryByOwnerId: async (ownerId) => {
         try {
-            const url = "https://api.vk.com/method/market.get?owner_id=" + ownerId +
+            const url = "https://api.vk.com/method/market.get?owner_id=-" + ownerId +
                 "&access_token=" + access_token + "&v=" + api_version;
             const fetch_response = await fetch(url);
             const tovary = await fetch_response.json();
@@ -58,7 +58,7 @@ module.exports = {
         try {
             //const groupId = ownerId.slice(1);  //  Удаляем первый символ "-"
             const url = "https://api.vk.com/method/groups.getById?group_id=" + groupId +
-                "&access_token=" + access_token + "&v=" + api_version + "&fields=description,market";
+                "&access_token=" + access_token + "&fields=description,market" + "&v=" + api_version;
             const fetch_response = await fetch(url);
             const groupInfo = await fetch_response.json();
             //  return groupInfo;   //  если нужно вернуть все поля

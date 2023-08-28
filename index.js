@@ -3,11 +3,14 @@ const mongoose = require('mongoose');
 const fetch = require('node-fetch');
 require('dotenv').config();   //  Чтобы получить данные из файла .env
 
-const sellerRoutes = require('./api/routes/sellers');
+// ---- Временно вместо sellers (с mongoose) - sellers-hardcode ---->
+// const sellerRoutes = require('./api/routes/sellers');
+const sellerRoutes = require('./api/routes/sellers-hardcode');
+// <-----
 const userRoutes = require('./api/routes/users');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 const mongo_user = process.env.MONGO_USER;
 const mongo_pass = process.env.MONGO_PASS;
@@ -16,10 +19,11 @@ const mongo_url = `mongodb+srv://${mongo_user}:${mongo_pass}@cluster0.tefog.mong
 async function start() {
     try {
         // Подключаемся к mongoose
-        await mongoose.connect(mongo_url, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
+        // --- времмено отключено. При необходимости - раскомментировать:
+        // await mongoose.connect(mongo_url, {
+        //     useNewUrlParser: true,
+        //     useUnifiedTopology: true
+        // });
 
         // Запускаем express
         //console.log("URL: " + mongo_url);
